@@ -1,4 +1,4 @@
-# Branch App Demo
+# GitHub Integration Java
 
 A Spring Boot REST API service that integrates with GitHub's public API to fetch and merge user and repository data into a simplified, unified response format.
 
@@ -175,7 +175,7 @@ JSON field order is typically not guaranteed, but the spec shows a specific orde
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd branch-app-demo
+   cd github-integration-java
    ```
 
 2. **Build the project**
@@ -200,13 +200,13 @@ JSON field order is typically not guaranteed, but the spec shows a specific orde
 ### Option 2: Using the JAR
 
 ```bash
-java -jar build/libs/branch-app-demo-0.0.1-SNAPSHOT.jar
+java -jar build/libs/github-integration-java-0.0.1-SNAPSHOT.jar
 ```
 
 ### Option 3: With Custom Configuration
 
 ```bash
-java -jar build/libs/branch-app-demo-0.0.1-SNAPSHOT.jar \
+java -jar build/libs/github-integration-java-0.0.1-SNAPSHOT.jar \
   --github.retry.max-attempts=3 \
   --github.retry.initial-interval-ms=500
 ```
@@ -405,7 +405,7 @@ github:
 
 Run with specific profile:
 ```bash
-java -jar build/libs/branch-app-demo-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
+java -jar build/libs/github-integration-java-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
 ```
 
 ### Configurable Properties
@@ -422,7 +422,7 @@ java -jar build/libs/branch-app-demo-0.0.1-SNAPSHOT.jar --spring.profiles.active
 ## Project Structure
 
 ```
-branch-app-demo/
+github-integration-java/
 ├── src/
 │   ├── main/
 │   │   ├── java/com/example/demo/
@@ -578,15 +578,15 @@ To change log levels without rebuilding:
 
 ```bash
 # Set to INFO (less verbose)
-java -jar build/libs/branch-app-demo-0.0.1-SNAPSHOT.jar \
+java -jar build/libs/github-integration-java-0.0.1-SNAPSHOT.jar \
   --logging.level.com.example.demo=INFO
 
 # Set to TRACE (most verbose)
-java -jar build/libs/branch-app-demo-0.0.1-SNAPSHOT.jar \
+java -jar build/libs/github-integration-java-0.0.1-SNAPSHOT.jar \
   --logging.level.com.example.demo=TRACE
 
 # Disable debug logs
-java -jar build/libs/branch-app-demo-0.0.1-SNAPSHOT.jar \
+java -jar build/libs/github-integration-java-0.0.1-SNAPSHOT.jar \
   --logging.level.com.example.demo=WARN
 ```
 

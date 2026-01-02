@@ -1,1 +1,1 @@
-rootProject.name = "branch-app-demo"
+rootProject.name = "github-integration-java"
