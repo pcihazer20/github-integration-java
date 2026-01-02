@@ -390,42 +390,6 @@ feign:
         loggerLevel: full
 ```
 
-### Environment-Specific Configuration
-
-Create `application-{profile}.yml` files for different environments:
-
-**Development** (`application-dev.yml`):
-```yaml
-github:
-  retry:
-    max-attempts: 3
-    initial-interval-ms: 500
-```
-
-**Production** (`application-prod.yml`):
-```yaml
-github:
-  retry:
-    max-attempts: 5
-    initial-interval-ms: 2000
-```
-
-Run with specific profile:
-```bash
-java -jar build/libs/github-integration-java-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
-```
-
-### Configurable Properties
-
-| Property | Default | Description |
-|----------|---------|-------------|
-| `server.port` | 8080 | HTTP server port |
-| `github.api.url` | https://api.github.com | GitHub API base URL |
-| `github.retry.max-attempts` | 5 | Maximum retry attempts |
-| `github.retry.initial-interval-ms` | 1000 | Initial retry delay (ms) |
-| `github.retry.max-interval-ms` | 10000 | Maximum retry delay (ms) |
-| `github.retry.multiplier` | 2.0 | Exponential backoff multiplier |
-
 ## Project Structure
 
 ```
@@ -468,25 +432,6 @@ github-integration-java/
 └── README.md                                     # This file
 ```
 
-## Development
-
-### Adding New Features
-
-1. **Add new endpoint**
-   - Create controller method in `GitHubController`
-   - Add corresponding service method
-   - Write contract and integration tests
-
-2. **Modify response structure**
-   - Update DTOs in `dto/` package
-   - Update MapStruct mappings in `GitHubMapper`
-   - Update test expectations
-
-3. **Change GitHub API integration**
-   - Modify `GitHubClient` interface
-   - Update DTOs to match new API contract
-   - Adjust mapper accordingly
-
 ### Code Quality
 
 **Build with all checks:**
@@ -503,35 +448,6 @@ github-integration-java/
 ```bash
 ./gradlew dependencies
 ```
-
-## Troubleshooting
-
-### Issue: GitHub API Rate Limiting
-
-**Symptom:** 429 Too Many Requests errors
-
-**Solution:**
-1. Reduce `github.retry.max-attempts` temporarily
-2. Increase `github.retry.initial-interval-ms`
-3. Consider adding GitHub API token for authenticated requests (60/hour → 5000/hour)
-
-### Issue: Tests Failing
-
-**Symptom:** WireMock tests fail with connection errors
-
-**Solution:**
-1. Ensure no other service is using port 0 (random)
-2. Run tests in isolation: `./gradlew clean test`
-3. Check test logs in `build/reports/tests/test/`
-
-### Issue: MapStruct Not Generating Code
-
-**Symptom:** Compilation errors about missing mapper implementation
-
-**Solution:**
-1. Run `./gradlew clean build` (not just compile)
-2. Check `build/generated/sources/annotationProcessor/` for generated code
-3. Ensure Lombok and MapStruct annotation processors are configured correctly
 
 ## Future Enhancements
 
@@ -550,9 +466,6 @@ Potential improvements for production deployment:
 
 This project is created for demonstration purposes.
 
-## Contact
-
-For questions or issues, please contact the development team.
 
 ## Logging
 
@@ -568,40 +481,4 @@ logging:
     com.example.demo.service.GitHubService: DEBUG
 ```
 
-### Log Output
 
-When debug logging is enabled, you'll see detailed logs for each API call:
-
-```
-DEBUG c.e.demo.service.GitHubService - Fetching GitHub user and repository data for username: octocat
-DEBUG c.e.demo.service.GitHubService - Successfully fetched user data for username: octocat. Display name: The Octocat, Created: 2011-01-25T18:44:36Z
-DEBUG c.e.demo.service.GitHubService - Successfully fetched 8 repositories for username: octocat
-DEBUG c.e.demo.service.GitHubService - Successfully mapped response for username: octocat. Total repos in response: 8
-```
-
-### Adjusting Log Levels
-
-To change log levels without rebuilding:
-
-```bash
-# Set to INFO (less verbose)
-java -jar build/libs/github-integration-java-0.0.1-SNAPSHOT.jar \
-  --logging.level.com.example.demo=INFO
-
-# Set to TRACE (most verbose)
-java -jar build/libs/github-integration-java-0.0.1-SNAPSHOT.jar \
-  --logging.level.com.example.demo=TRACE
-
-# Disable debug logs
-java -jar build/libs/github-integration-java-0.0.1-SNAPSHOT.jar \
-  --logging.level.com.example.demo=WARN
-```
-
-### Production Logging
-
-For production environments, consider:
-1. Using structured logging (JSON format) for easier parsing
-2. Sending logs to centralized logging system (ELK, Splunk, etc.)
-3. Setting appropriate log levels (INFO or WARN)
-4. Adding correlation IDs for request tracing
-5. Implementing log rotation to manage disk space
