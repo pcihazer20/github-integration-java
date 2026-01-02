@@ -1,3 +1,4 @@
+
 # GitHub Integration Java
 
 A Spring Boot REST API service that integrates with GitHub's public API to fetch and merge user and repository data into a simplified, unified response format.
