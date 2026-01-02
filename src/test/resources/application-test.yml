@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: branch-app-demo-test
+
+server:
+  port: 0
+
+github:
+  api:
+    url: http://localhost:${wiremock.server.port}
+  retry:
+    max-attempts: 3
+    initial-interval-ms: 100
+    max-interval-ms: 500
+    multiplier: 2.0
+
+feign:
+  client:
+    config:
+      github-client:
+        connectTimeout: 5000
+        readTimeout: 10000
+        loggerLevel: full
