@@ -18,3 +18,14 @@ feign:
         connectTimeout: 5000
         readTimeout: 5000
         loggerLevel: basic
+      github-client:
+        connectTimeout: 5000
+        readTimeout: 10000
+        loggerLevel: full
+
+github:
+  retry:
+    max-attempts: 5
+    initial-interval-ms: 1000
+    max-interval-ms: 10000
+    multiplier: 2.0
