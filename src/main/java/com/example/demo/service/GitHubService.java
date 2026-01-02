@@ -6,10 +6,12 @@ import com.example.demo.dto.GitHubUserResponse;
 import com.example.demo.dto.UserRepoResponse;
 import com.example.demo.mapper.GitHubMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GitHubService {
@@ -18,9 +20,19 @@ public class GitHubService {
     private final GitHubMapper gitHubMapper;
 
     public UserRepoResponse getUserWithRepos(String username) {
-        GitHubUserResponse user = gitHubClient.getUser(username);
-        List<GitHubRepoResponse> repos = gitHubClient.getRepos(username);
+        log.debug("Fetching GitHub user and repository data for username: {}", username);
 
-        return gitHubMapper.toUserRepoResponse(user, repos);
+        GitHubUserResponse user = gitHubClient.getUser(username);
+        log.debug("Successfully fetched user data for username: {}. Display name: {}, Created: {}",
+                username, user.getName(), user.getCreatedAt());
+
+        List<GitHubRepoResponse> repos = gitHubClient.getRepos(username);
+        log.debug("Successfully fetched {} repositories for username: {}", repos.size(), username);
+
+        UserRepoResponse response = gitHubMapper.toUserRepoResponse(user, repos);
+        log.debug("Successfully mapped response for username: {}. Total repos in response: {}",
+                username, response.getRepos() != null ? response.getRepos().size() : 0);
+
+        return response;
     }
 }

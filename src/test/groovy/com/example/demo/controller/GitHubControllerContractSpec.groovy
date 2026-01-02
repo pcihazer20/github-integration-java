@@ -24,14 +24,14 @@ class GitHubControllerContractSpec extends Specification {
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build()
     }
 
-    def "endpoint should accept GET requests at /api/users/{username}"() {
+    def "endpoint should accept GET requests at /api/v1/users/{username}"() {
         given: "A valid username"
         def username = "testuser"
         def mockResponse = buildMockResponse(username)
         gitHubService.getUserWithRepos(username) >> mockResponse
 
         when: "Making a GET request to the endpoint"
-        def result = mockMvc.perform(get("/api/users/{username}", username))
+        def result = mockMvc.perform(get("/api/v1/users/{username}", username))
 
         then: "Request should succeed"
         result.andExpect(status().isOk())
@@ -39,7 +39,7 @@ class GitHubControllerContractSpec extends Specification {
 
     def "endpoint should reject POST requests with 405 Method Not Allowed"() {
         when: "Making a POST request to the endpoint"
-        def result = mockMvc.perform(post("/api/users/testuser"))
+        def result = mockMvc.perform(post("/api/v1/users/testuser"))
 
         then: "Request should be rejected with 405"
         result.andExpect(status().isMethodNotAllowed())
@@ -52,7 +52,7 @@ class GitHubControllerContractSpec extends Specification {
         gitHubService.getUserWithRepos(username) >> mockResponse
 
         when: "Making a GET request to the endpoint"
-        def result = mockMvc.perform(get("/api/users/{username}", username))
+        def result = mockMvc.perform(get("/api/v1/users/{username}", username))
 
         then: "Response should have JSON content type"
         result.andExpect(status().isOk())
@@ -66,7 +66,7 @@ class GitHubControllerContractSpec extends Specification {
         gitHubService.getUserWithRepos(username) >> mockResponse
 
         when: "Making a GET request to the endpoint"
-        def result = mockMvc.perform(get("/api/users/{username}", username))
+        def result = mockMvc.perform(get("/api/v1/users/{username}", username))
 
         then: "Response should contain all required fields"
         result.andExpect(status().isOk())
@@ -101,7 +101,7 @@ class GitHubControllerContractSpec extends Specification {
         gitHubService.getUserWithRepos(username) >> mockResponse
 
         when: "Making a GET request to the endpoint"
-        def result = mockMvc.perform(get("/api/users/{username}", username))
+        def result = mockMvc.perform(get("/api/v1/users/{username}", username))
 
         then: "Response should contain correct values"
         result.andExpect(status().isOk())
@@ -123,7 +123,7 @@ class GitHubControllerContractSpec extends Specification {
         gitHubService.getUserWithRepos(username) >> mockResponse
 
         when: "Making a GET request with the username"
-        def result = mockMvc.perform(get("/api/users/{username}", username))
+        def result = mockMvc.perform(get("/api/v1/users/{username}", username))
 
         then: "The username should be accepted"
         result.andExpect(status().isOk())
@@ -148,7 +148,7 @@ class GitHubControllerContractSpec extends Specification {
         gitHubService.getUserWithRepos(username) >> mockResponse
 
         when: "Making a GET request to the endpoint"
-        def result = mockMvc.perform(get("/api/users/{username}", username))
+        def result = mockMvc.perform(get("/api/v1/users/{username}", username))
 
         then: "Response should contain repos array with correct structure"
         result.andExpect(status().isOk())
@@ -167,7 +167,7 @@ class GitHubControllerContractSpec extends Specification {
         gitHubService.getUserWithRepos(username) >> mockResponse
 
         when: "Making a GET request to the endpoint"
-        def result = mockMvc.perform(get("/api/users/{username}", username))
+        def result = mockMvc.perform(get("/api/v1/users/{username}", username))
 
         then: "Response fields should be in correct order"
         def responseBody = result.andReturn().response.contentAsString
@@ -185,7 +185,7 @@ class GitHubControllerContractSpec extends Specification {
         gitHubService.getUserWithRepos(username) >> mockResponse
 
         when: "Making a GET request to the endpoint"
-        def result = mockMvc.perform(get("/api/users/{username}", username))
+        def result = mockMvc.perform(get("/api/v1/users/{username}", username))
 
         then: "Repo objects should only have name and url fields"
         result.andExpect(status().isOk())

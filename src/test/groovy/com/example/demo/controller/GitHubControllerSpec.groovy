@@ -56,7 +56,7 @@ class GitHubControllerSpec extends Specification {
                         .withBody(repoPayload)))
 
         when: "Calling the merged user endpoint"
-        def result = mockMvc.perform(get("/api/users/${username}")
+        def result = mockMvc.perform(get("/api/v1/users/${username}")
                 .contentType(MediaType.APPLICATION_JSON))
 
         then: "Response should match expected merged payload"
@@ -101,7 +101,7 @@ class GitHubControllerSpec extends Specification {
                         .withBody(repoPayload)))
 
         when: "Calling the merged user endpoint"
-        def result = mockMvc.perform(get("/api/users/${username}")
+        def result = mockMvc.perform(get("/api/v1/users/${username}")
                 .contentType(MediaType.APPLICATION_JSON))
 
         then: "Request should succeed after retry"

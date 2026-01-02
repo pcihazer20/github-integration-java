@@ -54,14 +54,16 @@ This service provides a REST endpoint that aggregates GitHub user profile data w
 ### Component Responsibilities
 
 #### 1. **REST Controller** (`GitHubController`)
-- Exposes the public API endpoint: `GET /api/users/{username}`
+- Exposes the public API endpoint: `GET /api/v1/users/{username}`
 - Handles HTTP request/response lifecycle
 - Delegates business logic to the service layer
+- Uses versioned API path for future compatibility
 
 #### 2. **Service Layer** (`GitHubService`)
 - Orchestrates calls to GitHub API via Feign client
 - Coordinates the mapping of responses using MapStruct
 - Business logic encapsulation
+- Includes debug logging for observability
 
 #### 3. **Feign Client** (`GitHubClient`)
 - Declarative REST client for GitHub API
@@ -230,7 +232,7 @@ Fetches GitHub user profile and repository data, returning a merged, simplified 
 #### Request
 
 ```http
-GET /api/users/{username}
+GET /api/v1/users/{username}
 ```
 
 **Path Parameters:**
@@ -238,7 +240,7 @@ GET /api/users/{username}
 
 **Example:**
 ```bash
-curl http://localhost:8080/api/users/octocat
+curl http://localhost:8080/api/v1/users/octocat
 ```
 
 #### Response
@@ -296,7 +298,7 @@ Content-Type: application/json
   "timestamp": "2026-01-02T20:30:00.000+00:00",
   "status": 404,
   "error": "Not Found",
-  "path": "/api/users/nonexistentuser"
+  "path": "/api/v1/users/nonexistentuser"
 }
 ```
 
@@ -309,7 +311,7 @@ Content-Type: application/json
   "timestamp": "2026-01-02T20:30:00.000+00:00",
   "status": 429,
   "error": "Too Many Requests",
-  "path": "/api/users/octocat"
+  "path": "/api/v1/users/octocat"
 }
 ```
 
@@ -544,3 +546,55 @@ This project is created for demonstration purposes.
 ## Contact
 
 For questions or issues, please contact the development team.
+
+## Logging
+
+### Configuration
+
+Debug logging is enabled for the application package to provide visibility into service execution.
+
+**Logging Configuration** (`application.yml`):
+```yaml
+logging:
+  level:
+    com.example.demo: DEBUG
+    com.example.demo.service.GitHubService: DEBUG
+```
+
+### Log Output
+
+When debug logging is enabled, you'll see detailed logs for each API call:
+
+```
+DEBUG c.e.demo.service.GitHubService - Fetching GitHub user and repository data for username: octocat
+DEBUG c.e.demo.service.GitHubService - Successfully fetched user data for username: octocat. Display name: The Octocat, Created: 2011-01-25T18:44:36Z
+DEBUG c.e.demo.service.GitHubService - Successfully fetched 8 repositories for username: octocat
+DEBUG c.e.demo.service.GitHubService - Successfully mapped response for username: octocat. Total repos in response: 8
+```
+
+### Adjusting Log Levels
+
+To change log levels without rebuilding:
+
+```bash
+# Set to INFO (less verbose)
+java -jar build/libs/branch-app-demo-0.0.1-SNAPSHOT.jar \
+  --logging.level.com.example.demo=INFO
+
+# Set to TRACE (most verbose)
+java -jar build/libs/branch-app-demo-0.0.1-SNAPSHOT.jar \
+  --logging.level.com.example.demo=TRACE
+
+# Disable debug logs
+java -jar build/libs/branch-app-demo-0.0.1-SNAPSHOT.jar \
+  --logging.level.com.example.demo=WARN
+```
+
+### Production Logging
+
+For production environments, consider:
+1. Using structured logging (JSON format) for easier parsing
+2. Sending logs to centralized logging system (ELK, Splunk, etc.)
+3. Setting appropriate log levels (INFO or WARN)
+4. Adding correlation IDs for request tracing
+5. Implementing log rotation to manage disk space
