@@ -273,6 +273,12 @@ curl http://localhost:8080/api/v1/users/octocat
 }
 ```
 
+#### Sample Command-line Test
+
+![Alt text](artifacts/sample_test.png)
+
+
+
 #### Field Descriptions
 
 | Field | Type | Description |
